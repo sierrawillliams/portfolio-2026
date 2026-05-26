@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Work — Sierra Williams</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;700;800&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#060608; --surface:#0e0b10; --surface2:#150f18;
+  --magenta:#E040A0; --lavender:#B8A0D4; --flamingo:#FFB3C6;
+  --text:#f5f0f7; --muted:#6b5f72; --border:rgba(184,160,212,0.1);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;overflow-x:hidden;cursor:none}
+.cursor{position:fixed;width:10px;height:10px;background:var(--magenta);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .2s,height .2s}
+.cursor-ring{position:fixed;width:36px;height:36px;border:1px solid var(--lavender);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .3s,height .3s,opacity .3s;opacity:.4}
+.grid-bg{position:fixed;inset:0;background-image:linear-gradient(rgba(184,160,212,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(184,160,212,.03) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;z-index:0}
+.noise{position:fixed;inset:0;opacity:.03;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");background-size:200px;pointer-events:none;z-index:0}
+.orb{position:fixed;border-radius:50%;filter:blur(130px);pointer-events:none;z-index:0}
+.orb-1{width:500px;height:500px;background:var(--magenta);opacity:.07;top:-150px;right:-100px;animation:orbFloat 14s ease-in-out infinite}
+.orb-2{width:350px;height:350px;background:var(--lavender);opacity:.06;bottom:10%;left:-80px;animation:orbFloat 18s ease-in-out infinite reverse}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:26px 60px;border-bottom:1px solid var(--border);backdrop-filter:blur(16px);background:rgba(6,6,8,.7)}
+.nav-logo{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:.15em;color:var(--flamingo);text-decoration:none}
+.nav-logo span{color:var(--magenta)}
+.nav-links{display:flex;gap:44px;list-style:none}
+.nav-links a{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s;position:relative}
+.nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:1px;background:var(--magenta);transition:width .3s}
+.nav-links a:hover{color:var(--text)}
+.nav-links a:hover::after{width:100%}
+.nav-links a.active{color:var(--flamingo)}
+.nav-links a.active::after{width:100%;background:var(--flamingo)}
+.nav-cta{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--bg);background:var(--magenta);padding:10px 22px;text-decoration:none;transition:all .25s;border:1px solid var(--magenta)}
+.nav-cta:hover{background:transparent;color:var(--magenta)}
+
+.page-hero{position:relative;z-index:1;padding:160px 60px 80px;border-bottom:1px solid var(--border)}
+.page-eyebrow{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--magenta);margin-bottom:24px;display:flex;align-items:center;gap:14px;opacity:0;animation:fadeUp .7s ease .2s forwards}
+.page-eyebrow::before{content:'';width:30px;height:1px;background:var(--magenta)}
+.page-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(72px,11vw,150px);line-height:.88;letter-spacing:-.01em;color:var(--text);opacity:0;animation:fadeUp .8s ease .4s forwards}
+.page-title span{color:transparent;-webkit-text-stroke:1px var(--magenta)}
+.page-subtitle{margin-top:32px;max-width:520px;font-size:15px;line-height:1.8;color:var(--muted);opacity:0;animation:fadeUp .7s ease .6s forwards}
+
+/* Filter bar */
+.filter-bar{position:relative;z-index:1;padding:40px 60px;display:flex;gap:12px;border-bottom:1px solid var(--border)}
+.filter-btn{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;padding:8px 20px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:none;transition:all .2s}
+.filter-btn:hover,.filter-btn.active{border-color:var(--magenta);color:var(--magenta);background:rgba(224,64,160,.06)}
+
+/* Projects list */
+.projects-list{position:relative;z-index:1;padding:0 60px 100px}
+.project-row{display:grid;grid-template-columns:80px 1fr 200px 120px;align-items:center;gap:40px;padding:40px 0;border-bottom:1px solid var(--border);cursor:none;transition:all .3s;opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s ease,background .3s}
+.project-row.visible{opacity:1;transform:translateY(0)}
+.project-row:hover{background:rgba(224,64,160,.03);margin:0 -60px;padding:40px 60px}
+.project-num{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:.1em}
+.project-info{}
+.project-name{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--text);margin-bottom:8px;line-height:1.1;transition:color .2s}
+.project-row:hover .project-name{color:var(--flamingo)}
+.project-desc{font-size:13px;color:var(--muted);line-height:1.6;max-width:500px}
+.project-tags{display:flex;flex-direction:column;gap:4px;align-items:flex-start}
+.tag{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border:1px solid rgba(184,160,212,.2);color:var(--lavender)}
+.project-year{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);text-align:right}
+.project-arrow{font-size:20px;color:var(--magenta);opacity:0;transition:opacity .3s,transform .3s;display:inline-block}
+.project-row:hover .project-arrow{opacity:1;transform:translate(4px,-4px)}
+
+/* Featured visual block */
+.featured-block{position:relative;z-index:1;margin:60px;background:var(--surface);border:1px solid var(--border);padding:60px;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+.featured-badge{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--magenta);margin-bottom:20px;display:flex;align-items:center;gap:10px}
+.featured-badge::before{content:'';width:20px;height:1px;background:var(--magenta)}
+.featured-title{font-family:'Bebas Neue',sans-serif;font-size:56px;line-height:.9;letter-spacing:.01em;color:var(--text);margin-bottom:20px}
+.featured-title span{color:transparent;-webkit-text-stroke:1px var(--magenta)}
+.featured-body{font-size:14px;line-height:1.85;color:var(--muted);margin-bottom:32px}
+.featured-link{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--magenta);text-decoration:none;letter-spacing:.05em;display:inline-flex;align-items:center;gap:10px;transition:gap .2s}
+.featured-link:hover{gap:18px}
+.featured-visual{background:var(--surface2);height:300px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(224,64,160,.1);position:relative;overflow:hidden}
+.featured-visual::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 60% 40%,rgba(224,64,160,.15),transparent 70%)}
+.featured-visual-text{font-family:'Bebas Neue',sans-serif;font-size:100px;letter-spacing:.02em;color:rgba(224,64,160,.12)}
+
+footer{position:relative;z-index:1;padding:32px 60px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+footer span,footer a{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.1em;text-decoration:none}
+footer a:hover{color:var(--flamingo)}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+@keyframes orbFloat{0%,100%{transform:translate(0,0)}33%{transform:translate(25px,-25px)}66%{transform:translate(-15px,15px)}}
+</style>
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="ring"></div>
+<div class="grid-bg"></div>
+<div class="noise"></div>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+
+<nav>
+  <a href="index.html" class="nav-logo">Sierra <span>Williams</span></a>
+  <ul class="nav-links">
+    <li><a href="work.html" class="active">Work</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="process.html">Process</a></li>
+    <li><a href="journal.html">Journal</a></li>
+  </ul>
+  <a href="hire.html" class="nav-cta">Hire Me</a>
+</nav>
+
+<section class="page-hero">
+  <div class="page-eyebrow">Selected Projects</div>
+  <h1 class="page-title">THINGS I'VE<br><span>MADE WITH LOVE</span></h1>
+  <p class="page-subtitle">Every project here started with a real problem and ended with something I'm genuinely proud of. Some are client work, some are personal obsessions.</p>
+</section>
+
+<div class="filter-bar">
+  <button class="filter-btn active">All</button>
+  <button class="filter-btn">UI Design</button>
+  <button class="filter-btn">Frontend</button>
+  <button class="filter-btn">Design Systems</button>
+  <button class="filter-btn">Interaction</button>
+</div>
+
+<!-- Featured project -->
+<div class="featured-block reveal">
+  <div>
+    <div class="featured-badge">Featured Work</div>
+    <h2 class="featured-title">BLOOM<br><span>DESIGN SYSTEM</span></h2>
+    <p class="featured-body">A comprehensive component library built for a Series B startup — 80+ components, a full token architecture, and documentation that engineers actually wanted to read. Reduced design-to-dev handoff time by 60%.</p>
+    <a href="#" class="featured-link">View Case Study →</a>
+  </div>
+  <div class="featured-visual">
+    <span class="featured-visual-text">Bloom</span>
+  </div>
+</div>
+
+<div class="projects-list">
+  <div class="project-row">
+    <span class="project-num">001</span>
+    <div class="project-info">
+      <h3 class="project-name">Halo Finance Dashboard <span class="project-arrow">↗</span></h3>
+      <p class="project-desc">Reimagined the core analytics experience for a fintech app. Complex data made intuitive, beautiful, and fast.</p>
+    </div>
+    <div class="project-tags"><span class="tag">UI Design</span><span class="tag">Frontend</span></div>
+    <span class="project-year">2025</span>
+  </div>
+
+  <div class="project-row">
+    <span class="project-num">002</span>
+    <div class="project-info">
+      <h3 class="project-name">Aura Brand & Web <span class="project-arrow">↗</span></h3>
+      <p class="project-desc">Full identity and marketing site for a wellness startup. Soft, editorial, and deeply intentional.</p>
+    </div>
+    <div class="project-tags"><span class="tag">UI Design</span><span class="tag">Motion</span></div>
+    <span class="project-year">2025</span>
+  </div>
+
+  <div class="project-row">
+    <span class="project-num">003</span>
+    <div class="project-info">
+      <h3 class="project-name">Verse E-Commerce <span class="project-arrow">↗</span></h3>
+      <p class="project-desc">Built an immersive shopping experience for an independent fashion label — high conversion, higher craft.</p>
+    </div>
+    <div class="project-tags"><span class="tag">Frontend</span><span class="tag">Interaction</span></div>
+    <span class="project-year">2024</span>
+  </div>
+
+  <div class="project-row">
+    <span class="project-num">004</span>
+    <div class="project-info">
+      <h3 class="project-name">Lunar Onboarding Flow <span class="project-arrow">↗</span></h3>
+      <p class="project-desc">Redesigned a SaaS onboarding that cut drop-off by 42%. Micro-interactions that guide without demanding.</p>
+    </div>
+    <div class="project-tags"><span class="tag">UI Design</span><span class="tag">Research</span></div>
+    <span class="project-year">2024</span>
+  </div>
+
+  <div class="project-row">
+    <span class="project-num">005</span>
+    <div class="project-info">
+      <h3 class="project-name">Petal Portfolio Template <span class="project-arrow">↗</span></h3>
+      <p class="project-desc">An open-source portfolio template for creatives — downloaded 3k+ times since launch.</p>
+    </div>
+    <div class="project-tags"><span class="tag">Frontend</span><span class="tag">Open Source</span></div>
+    <span class="project-year">2024</span>
+  </div>
+</div>
+
+<footer>
+  <span>© 2026 Sierra Williams</span>
+  <span>Crafted with intention</span>
+  <a href="hire.html">Let's work together →</a>
+</footer>
+
+<script>
+const cur=document.getElementById('cursor'),ring=document.getElementById('ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px'});
+(function ani(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(ani)})();
+document.querySelectorAll('a,button,.project-row').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cur.style.width='18px';cur.style.height='18px';ring.style.width='58px';ring.style.height='58px';ring.style.opacity='.7'});
+  el.addEventListener('mouseleave',()=>{cur.style.width='10px';cur.style.height='10px';ring.style.width='36px';ring.style.height='36px';ring.style.opacity='.4'});
+});
+document.querySelectorAll('.filter-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active')});
+});
+const obs=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')}),{threshold:.1});
+document.querySelectorAll('.project-row,.reveal').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>

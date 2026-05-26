@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About — Sierra Williams</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;700;800&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#060608;--surface:#0e0b10;--surface2:#150f18;--magenta:#E040A0;--lavender:#B8A0D4;--flamingo:#FFB3C6;--text:#f5f0f7;--muted:#6b5f72;--border:rgba(184,160,212,0.1)}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;overflow-x:hidden;cursor:none}
+.cursor{position:fixed;width:10px;height:10px;background:var(--magenta);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .2s,height .2s}
+.cursor-ring{position:fixed;width:36px;height:36px;border:1px solid var(--lavender);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .3s,height .3s,opacity .3s;opacity:.4}
+.grid-bg{position:fixed;inset:0;background-image:linear-gradient(rgba(184,160,212,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(184,160,212,.03) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;z-index:0}
+.noise{position:fixed;inset:0;opacity:.03;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");background-size:200px;pointer-events:none;z-index:0}
+.orb{position:fixed;border-radius:50%;filter:blur(130px);pointer-events:none;z-index:0}
+.orb-1{width:500px;height:500px;background:var(--magenta);opacity:.07;top:-150px;right:-100px;animation:orbFloat 14s ease-in-out infinite}
+.orb-2{width:350px;height:350px;background:var(--lavender);opacity:.06;bottom:10%;left:-80px;animation:orbFloat 18s ease-in-out infinite reverse}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:26px 60px;border-bottom:1px solid var(--border);backdrop-filter:blur(16px);background:rgba(6,6,8,.7)}
+.nav-logo{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:.15em;color:var(--flamingo);text-decoration:none}
+.nav-logo span{color:var(--magenta)}
+.nav-links{display:flex;gap:44px;list-style:none}
+.nav-links a{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s;position:relative}
+.nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:1px;background:var(--magenta);transition:width .3s}
+.nav-links a:hover{color:var(--text)}
+.nav-links a:hover::after,.nav-links a.active::after{width:100%}
+.nav-links a.active{color:var(--flamingo)}
+.nav-links a.active::after{background:var(--flamingo)}
+.nav-cta{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--bg);background:var(--magenta);padding:10px 22px;text-decoration:none;transition:all .25s;border:1px solid var(--magenta)}
+.nav-cta:hover{background:transparent;color:var(--magenta)}
+
+/* Hero split */
+.about-hero{position:relative;z-index:1;padding:140px 60px 0;display:grid;grid-template-columns:1fr 1fr;gap:100px;min-height:90vh;align-items:center}
+.hero-left{}
+.eyebrow{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--magenta);margin-bottom:28px;display:flex;align-items:center;gap:14px;opacity:0;animation:fadeUp .7s ease .2s forwards}
+.eyebrow::before{content:'';width:30px;height:1px;background:var(--magenta)}
+.big-name{font-family:'Bebas Neue',sans-serif;font-size:clamp(72px,11vw,150px);line-height:.88;letter-spacing:-.01em;color:var(--text);opacity:0;animation:fadeUp .9s ease .4s forwards}
+.big-name em{font-style:italic;color:var(--lavender);display:block}
+.hero-tagline{margin-top:36px;font-size:16px;line-height:1.85;color:var(--muted);max-width:440px;opacity:0;animation:fadeUp .7s ease .7s forwards}
+.hero-tagline strong{color:var(--text)}
+.hero-actions{margin-top:48px;display:flex;gap:20px;opacity:0;animation:fadeUp .7s ease .9s forwards}
+.btn-primary{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--bg);background:var(--magenta);padding:14px 32px;text-decoration:none;transition:all .25s;border:1px solid var(--magenta)}
+.btn-primary:hover{background:transparent;color:var(--magenta)}
+.btn-secondary{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--lavender);background:transparent;padding:14px 32px;text-decoration:none;transition:all .25s;border:1px solid rgba(184,160,212,.3)}
+.btn-secondary:hover{border-color:var(--lavender);color:var(--text)}
+.hero-right{display:flex;flex-direction:column;gap:2px;opacity:0;animation:fadeIn 1s ease .8s forwards}
+.portrait-frame{background:var(--surface);border:1px solid var(--border);height:480px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.portrait-frame::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 40% 30%,rgba(224,64,160,.12),transparent 65%)}
+.portrait-initial{font-family:'Bebas Neue',sans-serif;font-size:220px;letter-spacing:-.02em;color:rgba(224,64,160,.08);user-select:none}
+.portrait-caption{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);padding:16px 20px;background:var(--surface);border:1px solid var(--border);border-top:none}
+
+/* Story section */
+.story{position:relative;z-index:1;padding:120px 60px;display:grid;grid-template-columns:280px 1fr;gap:100px}
+.story-nav{position:sticky;top:120px;height:fit-content}
+.story-nav-item{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);padding:12px 0;border-bottom:1px solid var(--border);display:block;text-decoration:none;transition:color .2s}
+.story-nav-item:hover,.story-nav-item.active{color:var(--flamingo)}
+.story-content{}
+.story-block{margin-bottom:80px;opacity:0;transform:translateY(20px);transition:opacity .7s,transform .7s}
+.story-block.visible{opacity:1;transform:translateY(0)}
+.story-block-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--magenta);margin-bottom:20px;display:flex;align-items:center;gap:10px}
+.story-block-label::before{content:'';width:20px;height:1px;background:var(--magenta)}
+.story-block h2{font-family:'Bebas Neue',sans-serif;font-size:48px;letter-spacing:.01em;color:var(--text);margin-bottom:24px;line-height:.9}
+.story-block h2 em{font-style:italic;color:var(--lavender)}
+.story-block p{font-size:15px;line-height:1.9;color:var(--muted);margin-bottom:16px}
+.story-block p strong{color:var(--text)}
+
+/* Values */
+.values-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-top:20px}
+.value-card{background:var(--surface);padding:32px 28px;border:1px solid var(--border);transition:border-color .3s}
+.value-card:hover{border-color:rgba(224,64,160,.3)}
+.value-num{font-family:'Bebas Neue',sans-serif;font-size:48px;letter-spacing:.02em;color:rgba(224,64,160,.3);margin-bottom:12px;line-height:1}
+.value-title{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--text);margin-bottom:8px}
+.value-desc{font-size:13px;color:var(--muted);line-height:1.7}
+
+/* Outside work */
+.interests{display:flex;gap:12px;flex-wrap:wrap;margin-top:24px}
+.interest{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:8px 16px;border:1px solid rgba(184,160,212,.2);color:var(--lavender);transition:all .2s}
+.interest:hover{border-color:var(--lavender);background:rgba(184,160,212,.05)}
+
+/* Tools */
+.tools-list{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;margin-top:20px;border:1px solid var(--border)}
+.tool-item{padding:20px 24px;background:var(--surface);display:flex;align-items:center;gap:12px;font-size:13px;color:var(--muted);transition:all .2s;border:none}
+.tool-item:hover{background:var(--surface2);color:var(--text)}
+.tool-dot{width:6px;height:6px;border-radius:50%;background:var(--magenta);flex-shrink:0;opacity:.6}
+
+footer{position:relative;z-index:1;padding:32px 60px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+footer span,footer a{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.1em;text-decoration:none}
+footer a:hover{color:var(--flamingo)}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes orbFloat{0%,100%{transform:translate(0,0)}33%{transform:translate(25px,-25px)}66%{transform:translate(-15px,15px)}}
+</style>
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="ring"></div>
+<div class="grid-bg"></div><div class="noise"></div>
+<div class="orb orb-1"></div><div class="orb orb-2"></div>
+
+<nav>
+  <a href="index.html" class="nav-logo">Sierra <span>Williams</span></a>
+  <ul class="nav-links">
+    <li><a href="work.html">Work</a></li>
+    <li><a href="about.html" class="active">About</a></li>
+    <li><a href="process.html">Process</a></li>
+    <li><a href="journal.html">Journal</a></li>
+  </ul>
+  <a href="hire.html" class="nav-cta">Hire Me</a>
+</nav>
+
+<section class="about-hero">
+  <div class="hero-left">
+    <div class="eyebrow">The person behind the work</div>
+    <h1 class="big-name">Sierra<br><em>Williams</em></h1>
+    <p class="hero-tagline">
+      <strong>Frontend developer & UI designer</strong> who believes that beautiful software isn't a luxury — it's the whole point. I build things that feel as good as they look.
+    </p>
+    <div class="hero-actions">
+      <a href="hire.html" class="btn-primary">Work with me</a>
+      <a href="#story" class="btn-secondary">Read my story</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="portrait-frame">
+      <span class="portrait-initial">S</span>
+    </div>
+    <div class="portrait-caption">Sierra Williams — Frontend Developer & UI Designer</div>
+  </div>
+</section>
+
+<section class="story" id="story">
+  <nav class="story-nav">
+    <a href="#origin" class="story-nav-item active">Origin</a>
+    <a href="#craft" class="story-nav-item">The Craft</a>
+    <a href="#values" class="story-nav-item">Values</a>
+    <a href="#tools" class="story-nav-item">Tools</a>
+    <a href="#life" class="story-nav-item">Outside Work</a>
+  </nav>
+
+  <div class="story-content">
+    <div class="story-block" id="origin">
+      <div class="story-block-label">Origin Story</div>
+      <h2>How I got <em>here</em></h2>
+      <p>I fell in love with the web at 16, building badly-designed fan sites that I thought were the coolest things in existence. The design was terrible. The code was worse. But that feeling of making something appear in a browser — of creating something from nothing — never left me.</p>
+      <p>I studied <strong>Computer Science with a focus on Human-Computer Interaction</strong>, which gave me the vocabulary to understand why some interfaces feel effortless and others feel like a puzzle. Now, I use that knowledge every day to make sure the things I build feel like the former.</p>
+      <p>I've worked with startups, agencies, and independent clients across three continents. What stays consistent is the care I bring to every pixel, every transition, every moment of interaction.</p>
+    </div>
+
+    <div class="story-block" id="craft">
+      <div class="story-block-label">The Craft</div>
+      <h2>What I <em>actually do</em></h2>
+      <p>My specialty is the <strong>space between design and engineering</strong> — the place where a Figma file becomes something real. I work best with teams that care about craft as much as I do, where "good enough" isn't.</p>
+      <p>I design in the browser as much as in Figma, because I believe the final medium should shape the creative decisions. A transition that looks perfect on a static mockup might feel wrong when you actually interact with it. I find out early.</p>
+      <p>I also love <strong>design systems</strong> — the architecture of reusable components that lets teams build faster without sacrificing quality. There's something deeply satisfying about building infrastructure that other people depend on.</p>
+    </div>
+
+    <div class="story-block" id="values">
+      <div class="story-block-label">What I Stand For</div>
+      <h2>The things that <em>matter</em></h2>
+      <div class="values-grid">
+        <div class="value-card">
+          <div class="value-num">01</div>
+          <div class="value-title">Intentionality</div>
+          <div class="value-desc">Every decision — every color, spacing, animation — should have a reason. I don't add because I can; I add because it helps.</div>
+        </div>
+        <div class="value-card">
+          <div class="value-num">02</div>
+          <div class="value-title">Accessibility</div>
+          <div class="value-desc">Beautiful design that not everyone can use is incomplete design. Inclusion isn't a feature — it's the baseline.</div>
+        </div>
+        <div class="value-card">
+          <div class="value-num">03</div>
+          <div class="value-title">Honesty</div>
+          <div class="value-desc">I'll tell you when something isn't working, even if you love it. My goal is your goal — to build something that actually succeeds.</div>
+        </div>
+        <div class="value-card">
+          <div class="value-num">04</div>
+          <div class="value-title">Craft</div>
+          <div class="value-desc">The details are the design. The micro-interaction nobody notices consciously is the one that makes them feel something.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="story-block" id="tools">
+      <div class="story-block-label">My Toolkit</div>
+      <h2>The tools I <em>trust</em></h2>
+      <p>Tools are just tools — but the right ones make the thinking clearer.</p>
+      <div class="tools-list">
+        <div class="tool-item"><span class="tool-dot"></span>Figma</div>
+        <div class="tool-item"><span class="tool-dot"></span>React / Next.js</div>
+        <div class="tool-item"><span class="tool-dot"></span>TypeScript</div>
+        <div class="tool-item"><span class="tool-dot"></span>Framer Motion</div>
+        <div class="tool-item"><span class="tool-dot"></span>Tailwind CSS</div>
+        <div class="tool-item"><span class="tool-dot"></span>Storybook</div>
+        <div class="tool-item"><span class="tool-dot"></span>GSAP</div>
+        <div class="tool-item"><span class="tool-dot"></span>Webflow</div>
+        <div class="tool-item"><span class="tool-dot"></span>Git / GitHub</div>
+      </div>
+    </div>
+
+    <div class="story-block" id="life">
+      <div class="story-block-label">Outside the Screen</div>
+      <h2>A whole <em>person</em></h2>
+      <p>When I'm not building things, I'm usually found in coffee shops with a sketchbook, at contemporary art exhibitions I have strong opinions about, or trying to grow things on my balcony with mixed success.</p>
+      <p>I believe the best creative work comes from people who are <strong>curious about everything</strong> — not just their field. My interests keep my perspective wide.</p>
+      <div class="interests">
+        <span class="interest">Film Photography</span>
+        <span class="interest">Contemporary Art</span>
+        <span class="interest">Ceramics</span>
+        <span class="interest">Jazz</span>
+        <span class="interest">Urban Gardening</span>
+        <span class="interest">Long-form Essays</span>
+        <span class="interest">Sourdough</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>© 2026 Sierra Williams</span>
+  <span>Always open to interesting conversations</span>
+  <a href="hire.html">Get in touch →</a>
+</footer>
+
+<script>
+const cur=document.getElementById('cursor'),ring=document.getElementById('ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px'});
+(function ani(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(ani)})();
+document.querySelectorAll('a,button').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cur.style.width='18px';cur.style.height='18px';ring.style.width='58px';ring.style.height='58px';ring.style.opacity='.7'});
+  el.addEventListener('mouseleave',()=>{cur.style.width='10px';cur.style.height='10px';ring.style.width='36px';ring.style.height='36px';ring.style.opacity='.4'});
+});
+const obs=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')}),{threshold:.15});
+document.querySelectorAll('.story-block,.value-card,.tool-item').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>
